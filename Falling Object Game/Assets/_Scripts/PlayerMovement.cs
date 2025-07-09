@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void IncreaseScore(int amount)
     {
+        //AudioManager.Instance.PlayPickup();
         score += amount;
         scoreText.text = "Score: " + score;
         if (amount > 0)

@@ -6,6 +6,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject optionsPanel;
     [SerializeField] private GameObject aboutPanel;
+    [SerializeField] private GameObject gameOverPanel;
 
     [SerializeField] private GameManager gameManager;
 
@@ -20,12 +21,20 @@ public class UIManager : MonoBehaviour
         mainMenuPanel.SetActive(true);
         optionsPanel.SetActive(false);
         aboutPanel.SetActive(false);
+        gameOverPanel.SetActive(false);
     }
     public void ShowOptionsPanel()
     {
         mainMenuPanel.SetActive(false);
         optionsPanel.SetActive(true);
         aboutPanel.SetActive(false);
+    }
+
+    public void ShowAboutPanel()
+    {
+        mainMenuPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+        aboutPanel.SetActive(true);
     }
 
     public void OnPlayButtonClicked()
