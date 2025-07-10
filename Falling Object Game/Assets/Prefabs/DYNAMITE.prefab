@@ -125,6 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreAmount: -5
   isBad: 1
+  playerMovement: {fileID: -8196037598492216283, guid: 3ef1377495a2ad64596a28e58100c237, type: 3}
 --- !u!54 &5627257782439379845
 Rigidbody:
   m_ObjectHideFlags: 0

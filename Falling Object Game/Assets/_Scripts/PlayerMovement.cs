@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement Instance { get; private set; }
+
     [SerializeField] private Rigidbody playerRigidbody;
     [SerializeField] private float speed;
     [SerializeField] private TMP_Text scoreText;
@@ -15,10 +17,21 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text endScoreText;
 
-
     private int increaseLifeCounter = 0;
     [SerializeField] private int comboCounter = 0;
     private int score = 0;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -33,13 +46,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A) && transform.position.x > -7)
         {
-            // playerRigidbody.linearVelocity = Vector2.left * speed * Time.deltaTime;
             Move(Vector2.right);
         }
 
         if (Input.GetKey(KeyCode.D) && transform.position.x < 7)
         {
-            //playerRigidbody.linearVelocity = Vector2.right * speed * Time.deltaTime;
             Move(Vector2.left);
         }
     }
@@ -54,11 +65,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void IncreaseScore(int amount)
     {
-        //AudioManager.Instance.PlayPickup();
         score += amount;
         scoreText.text = "Score: " + score;
         if (amount > 0)
         {
+            AudioManager.Instance.PlayPickupGood();
             increaseLifeCounter++;
             comboCounter++;
 
@@ -80,12 +91,12 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            AudioManager.Instance.PlayPickupBad();
             increaseLifeCounter = 0;
             comboCounter = 0;
             counterComboShow.gameObject.SetActive(false);
             RemoveLife();
         }
-
     }
 
     public void RemoveLife()
@@ -109,6 +120,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void GameOver()
     {
+        AudioManager.Instance.StopBackgroundMusic();
+        AudioManager.Instance.PlayLoseMusic();
         gameOverPanel.SetActive(true);
         scoreText.gameObject.SetActive(false);
         endScoreText.text = "Final Score: " + score;
@@ -129,4 +142,16 @@ public class PlayerMovement : MonoBehaviour
         comboCounter = 0;
     }
 
+    public void BreakCombo()
+    {
+        comboCounter = 0;
+        increaseLifeCounter = 0;
+        if (counterComboShow != null)
+        {
+            counterComboShow.text = string.Empty; // Clear the text
+            counterComboShow.gameObject.SetActive(false);
+        }
+
+        Debug.Log($"Combo broken! Counter reset. comboCounter={comboCounter}, increaseLifeCounter={increaseLifeCounter}");
+    }
 }

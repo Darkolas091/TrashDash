@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
         {
             spawnCorutine = StartCoroutine(SpawnRoutine());
         }
+
+        AudioManager.Instance.SetNewGameMusic();
+        AudioManager.Instance.StopBackgroundMusic();
+        AudioManager.Instance.PlayBackgroundMusic();
     }
 
     public void CleanupScene()
