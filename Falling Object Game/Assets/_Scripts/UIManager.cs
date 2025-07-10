@@ -14,6 +14,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text volumeText;
     [SerializeField] private Slider volumeSlider;
 
+    [Header("Image and Text")]
+    [SerializeField] private GameObject imageToShow;
+    [SerializeField] private TMP_Text textToChangeColor;
 
 
     [SerializeField] private GameManager gameManager;
@@ -24,11 +27,20 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.Instance.PlayLoseMusic();
         ShowMainMenuPanel();
     }
 
     public void ShowMainMenuPanel()
     {
+        //AudioManager.Instance.StopBackgroundMusic();
+        //AudioManager.Instance.PlayLoseMusic();
+
+        if (imageToShow != null)
+        {
+            imageToShow.SetActive(false);
+            textToChangeColor.color = Color.white; // Reset to default color
+        }
         AudioManager.Instance.PlayButtonClick();
         mainMenuPanel.SetActive(true);
         optionsPanel.SetActive(false);
@@ -60,15 +72,23 @@ public class UIManager : MonoBehaviour
 
     public void OnVolumeSliderChanged()
     {
-        AudioManager.Instance.PlayButtonClick();
         float value = volumeSlider.value;
-        AudioListener.volume = value;
+        // Map slider value (0-100) to AudioListener.volume (0-0.5)
+        float mappedVolume = Mathf.Clamp01(value / 100f) * 0.5f;
+        AudioListener.volume = mappedVolume;
         volumeText.text = $"{value}%";
     }
+
 
     public void ToggleFullScreen(bool isFullScreen)
     {
         Screen.fullScreen = isFullScreen;
+    }
+
+    public void OnExitButtonClicked()
+    {
+        AudioManager.Instance.PlayButtonClick();
+        Application.Quit();
     }
 
 

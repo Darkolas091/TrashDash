@@ -15,7 +15,6 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip pickupBadClip;
     [SerializeField] private AudioClip buttonClickClip;
 
-
     private void Awake()
     {
         if (Instance == null)
@@ -28,11 +27,16 @@ public class AudioManager : MonoBehaviour
 
     public void PlayBackgroundMusic()
     {
+        if (musicSource.clip != backgroundMusicClip)
+        {
+            musicSource.clip = backgroundMusicClip;
+        }
         if (!musicSource.isPlaying)
         {
             musicSource.Play();
         }
     }
+
     public void StopBackgroundMusic()
     {
         if (musicSource.isPlaying)
@@ -40,11 +44,15 @@ public class AudioManager : MonoBehaviour
             musicSource.Stop();
         }
     }
+
     public void PlayLoseMusic()
     {
-        if (!musicSource.isPlaying || musicSource.clip != loseMusicClip)
+        if (musicSource.clip != loseMusicClip)
         {
             musicSource.clip = loseMusicClip;
+        }
+        if (!musicSource.isPlaying)
+        {
             musicSource.Play();
         }
     }
@@ -52,6 +60,11 @@ public class AudioManager : MonoBehaviour
     public void SetNewGameMusic()
     {
         musicSource.clip = backgroundMusicClip;
+    }
+
+    public void PlayMainMenuMusic()
+    {
+        PlayLoseMusic();
     }
 
     public void PlayPickupGood()
